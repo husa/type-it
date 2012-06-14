@@ -1,17 +1,15 @@
-var Training = function() {
+var Training = function () {
 	var text_field = $('#text'),
 		input_field = $('#input-field'),
 		training_text = '';
 
 	var lecture = new Lecture();
 
-	
-
 	this.getLanguage = function () {
-		return 'english'
+		return 'english';
 	}
 
-	this.getLevel = function (x) {
+	this.getLevel = function () {
 		
 	}
 
@@ -123,101 +121,13 @@ var Training = function() {
 
 
 $(function () {
-
 	var training = new Training();
+
 	training.disableDefaultKeys();
+
 	training.setLesson('English', 'level1');
+
 	training.outputLesson();
+	
 	training.bindKeypress();
-})
-
-
-
-
-
-
-// $(function () {
-
-// 	var input_field = $('#input-field'),
-// 		text_field = $('#text'),
-// 		mistake = false,
-// 		mistake_position = -1;
-
-		
-// 	// text to be inputted
-// 	var training_text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam";		
-// 	text_field.html(training_text);
-
-	
-// 	function refreshPosition (current_length) {
-// 		var len_symbols = training_text.length,
-// 			len_px = text_field.width(),
-// 			x = (len_px * current_length) / len_symbols;
-
-// 			input_field.stop().animate({
-// 				'left' : -x + 250 + 'px', 
-// 				'width' : '+=' + (len_px / len_symbols) + 'px'}, 
-// 				300);
-// 			text_field.stop().animate({
-// 				'left' : -x + 250 + 'px'},
-// 				300);
-// 	}// end refreshPosition
-	
-// 	function getLetter( msg ) {	
-// 		// pressed_letter is the last letter in msg
-// 		return  msg[msg.length - 1];
-// 	}// end getLetter
-
-// 	function disableDefaultKeys(e) {
-// 		var defaultKeys = [13, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46];
-// 		if (defaultKeys.indexOf(e.keyCode) != -1) {
-// 			e.preventDefault();
-// 		}
-// 	}// end disableDefaultKeys
-
-// 	function isOver (len1, len2) {
-// 		if (len1 === len2) {
-// 			alert("it's over");
-// 		}
-// 	}
-
-// 	input_field.on('keydown', function (e) {
-// 		disableDefaultKeys(e);
-// 	})
-
-// 	// on keypress
-// 	input_field.on('keyup', function(e) {
-// 		var current_text = input_field.val(),
-// 			current_length = current_text.length,
-// 			pressed_letter = getLetter(current_text);
-			
-// 			// if there are no mistakes before this letter
-// 			if (!mistake) {
-// 				// if this letter is incorrect
-// 				if (pressed_letter != training_text[current_length - 1]) {
-// 					mistake = true;
-// 					mistake_position = current_length;
-// 					input_field.addClass('mistake');
-// 				// if this letter is correct
-// 				} else {
-// 					// increase count of typed symbols
-
-// 					// if "space" was pressed
-// 					if (pressed_letter == ' ') {
-// 						// increase count of typed words
-// 					}	
-// 				}
-// 			// if there was a mistake before this letter
-// 			} else {
-// 				// if mistake was deleted (backspace)
-// 				if (current_length == ( mistake_position - 1) ) {
-// 					mistake = false;
-// 					mistake_position = -1;
-// 					input_field.removeClass('mistake');
-// 				}
-// 			}// end if
-// 			refreshPosition(current_length);
-// 			isOver(current_length, training_text.length);
-// 	});
-
-// });//end jQuery
+});

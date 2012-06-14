@@ -71,11 +71,4 @@ var Alphabet = function (param) {
 		32  : ' '
 	}
 
-	switch (param){
-		case 'english' :
-			return english;
-		case 'ukrainian' : 
-			return ukrainian
-	}// end switch
-
 }// end Alphabet
