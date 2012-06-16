@@ -1,5 +1,5 @@
 var Training = function () {
-	var text_field = $('#text'),
+	var text_field = $('#text-field'),
 		input_field = $('#input-field'),
 		training_text = '';
 
@@ -27,11 +27,11 @@ var Training = function () {
 			x = (len_px * len) / len_symbols;
 
 			input_field.stop().animate({
-				'left' : -x + 250 + 'px', 
+				'left' : -x + 'px', 
 				'width' : '+=' + (len_px / len_symbols) + 'px'}, 
 				300);
 			text_field.stop().animate({
-				'left' : -x + 250 + 'px'},
+				'left' : -x + 'px'},
 				300);
 	}// end refreshPosition
 
