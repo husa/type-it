@@ -1,21 +1,22 @@
 var Training = function () {
-	var text_field = $('#text-field'),
-		input_field = $('#input-field'),
+	var text_field    = $('#text-field'),
+		input_field   = $('#input-field'),
 		training_text = '';
 
 	var lecture = new Lecture();
 
-	this.getLanguage = function () {
-		return 'english';
-	}
+	var time1 = false, time2 = false;
+	// this.getLanguage = function () {
+	// 	return 'english';
+	// }
 
-	this.getLevel = function () {
-		
-	}
+	// this.getLevel = function () {
+	// 	return 'level2';
+	// }
 
 	this.setLesson = function (lang, level) {
-		training_text = lecture.English.level1.lesson;
-	}
+		training_text = lecture[ lang][ level ].lesson;
+	}// end setLesson
 
 	this.outputLesson = function () {
 		text_field.html(training_text);
@@ -23,8 +24,8 @@ var Training = function () {
 
 	this.refreshPosition = function (len) {
 		var len_symbols = text_field.html().length,
-			len_px = text_field.width(),
-			x = (len_px * len) / len_symbols;
+			len_px      = text_field.width(),
+			x           = (len_px * len) / len_symbols;
 
 			input_field.stop().animate({
 				'left' : -x + 'px', 
@@ -53,18 +54,23 @@ var Training = function () {
 	}// end mistakeFixed
 
 	this.onEnd = function () {
-		var typed_text = input_field.val(),
+		var typed_text    = input_field.val(),
 			typed_symbols = typed_text.length,
-			typed_words = typed_text.split(' ').length;
-			console.log('text = ' + typed_text);
-			console.log('symbols = ' + typed_symbols);
-			console.log('words = ' + typed_words);
+			typed_words   = typed_text.split(' ').length;
 
-	}
+			console.log(' - time measurement stopped');
+			if (time2 == false) { time2 = new Date(); }
+			//console.log( (time2 - time1) / (1000 * 60) );
+			console.log('speed   = ' +  Math.round( typed_symbols / ((time2 - time1) / (1000*60)) ) + ' ch/min');
+
+			console.log('text    = ' + typed_text);
+			console.log('symbols = ' + typed_symbols);
+			console.log('words   = ' + typed_words);
+	}// end onEnd
 
 	this.bindKeypress = function() {
-		var obj = this;
-		var mistake = false,
+		var obj              = this,
+			mistake          = false,
 			mistake_position = -1;
 
 		function getLetter( msg ) {	
@@ -97,12 +103,11 @@ var Training = function () {
 				// if there was a mistake before this letter
 				} else {
 					// if mistake was deleted (backspace)
-					if (current_length == ( mistake_position - 1) ) {
+					if ( ( current_length == ( mistake_position - 1) ) || (current_length < mistake_position - 1) ) {
 						mistake = false;
 						mistake_position = -1;
 
 						obj.mistakeFixed();
-
 					}
 				}// end if
 
@@ -110,9 +115,15 @@ var Training = function () {
 
 				if (isOver(current_length, training_text.length)) { obj.onEnd(); }
 		}// end check
-
+ 
 		input_field.on('keyup', function (e) {
-			check( $(this).val() );
+			if (!time1) {
+				time1 = new Date();
+				console.log(' - time measurement started')
+				check( $(this).val() );
+			} else {
+				check( $(this).val() );
+			}
 		});
 
 	}// end bindKeypress
@@ -125,7 +136,7 @@ $(function () {
 
 	training.disableDefaultKeys();
 
-	training.setLesson('English', 'level1');
+	training.setLesson('english', 'level1');
 
 	training.outputLesson();
 	

@@ -23,15 +23,21 @@
 $(function () {
 
   $('#go').on('click', function () {
+
       var file = $('#file-input')[0].files[0];
 
       console.log(file);
 
       var reader = new FileReader();
-      
-      reader.onload = receivedText;
 
-      reader.readAsText(file);
+      console.log(reader)
+
+      reader.onload = function (f) {
+        console.log('onload');
+        console.log(f);
+      }
+      
+      reader.readAsDataURL(file);
 
       
 

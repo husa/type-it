@@ -3,8 +3,10 @@ var Statistic = function () {
 	this.endPoint = 0;
 
 	this.timeElapsed = 0;
+
 	this.symbolsTyped = 0;
 	this.wordsTypes = 0;
+	
 	this.mistakesMade = 0;
 	
 	this.speedSymbols = 0;
@@ -21,6 +23,3 @@ var Statistic = function () {
 
 	}
 }// end Statistic constructor
-
-// test
-var Stats = new Statistic();

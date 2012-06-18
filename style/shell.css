@@ -27,7 +27,7 @@ body{
 
 /*------------------------------ 		Main Content Elements */
 #info-wrapper{
-
+	float: right;
 }
 #text-wrapper{
 	position: relative;
