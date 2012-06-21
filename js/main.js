@@ -1,27 +1,58 @@
-var Training = function () {
-	var text_field    = $('#text-field'),
-		input_field   = $('#input-field'),
-		training_text = '';
+var MODEL = function () {
+	var	mistake          = false,
+		mistake_position = -1;
 
-	var lecture = new Lecture();
+	function getLetter( msg ) {	
+		// pressed_letter is the last letter in msg
+		return  msg[msg.length - 1];
+	}// end getLetter
 
-	var time1 = false, time2 = false;
-	// this.getLanguage = function () {
-	// 	return 'english';
-	// }
+	function isOver (len1, len2) {
+		if (len1 === len2) {
+			return true;
+		} else {
+			return false;
+		}
+	}// end isOver
 
-	// this.getLevel = function () {
-	// 	return 'level2';
-	// }
+	function check (current_text) {	
+		var	current_length = current_text.length,
+			pressed_letter = getLetter(current_text);
+			
+			// if there are no mistakes before this letter
+			if (!mistake) {
+				// if this letter is incorrect
+				if (pressed_letter != training_text[current_length - 1]) {
+					mistake = true;
+					mistake_position = current_length;
 
-	this.setLesson = function (lang, level) {
-		training_text = lecture[ lang][ level ].lesson;
-	}// end setLesson
+					View.mistakeMade();
 
-	this.outputLesson = function () {
-		text_field.html(training_text);
-	}// end outputLesson
+				// if this letter is correct
+				}
+			// if there was a mistake before this letter
+			} else {
+				// if mistake was deleted (backspace)
+				if ( ( current_length == ( mistake_position - 1) ) || (current_length < mistake_position - 1) ) {
+					mistake = false;
+					mistake_position = -1;
 
+					View.mistakeFixed();
+				}
+			}// end if
+
+			View.refreshPosition(current_length);
+
+			if (isOver(current_length, training_text.length)) { View.onEnd(); }
+	}// end check
+
+	this.check = function (current_text) {
+		check(current_text);
+	}// end check method
+
+}// end Model
+
+var VIEW = function () {
 	this.refreshPosition = function (len) {
 		var len_symbols = text_field.html().length,
 			len_px      = text_field.width(),
@@ -35,23 +66,6 @@ var Training = function () {
 				'left' : -x + 'px'},
 				300);
 	}// end refreshPosition
-
-	this.disableDefaultKeys = function (e) {
-		input_field.on('keydown', function (e) {
-			var defaultKeys = [13, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46];
-			if (defaultKeys.indexOf(e.keyCode) != -1) {
-				e.preventDefault();
-			}			
-		})
-	}// end disableDefaultKeys
-
-	this.mistakeMade = function () {
-		input_field.addClass('mistake');
-	}// end mistakeMade
-
-	this.mistakeFixed = function () {
-		input_field.removeClass('mistake');
-	}// end mistakeFixed
 
 	this.onEnd = function () {
 		var typed_text    = input_field.val(),
@@ -68,77 +82,81 @@ var Training = function () {
 			console.log('words   = ' + typed_words);
 	}// end onEnd
 
-	this.bindKeypress = function() {
-		var obj              = this,
-			mistake          = false,
-			mistake_position = -1;
+	this.mistakeMade = function () {
+		input_field.addClass('mistake');
+	}// end mistakeMade
 
-		function getLetter( msg ) {	
-			// pressed_letter is the last letter in msg
-			return  msg[msg.length - 1];
-		}// end getLetter
+	this.mistakeFixed = function () {
+		input_field.removeClass('mistake');
+	}// end mistakeFixed
+}// end View
 
-		function isOver (len1, len2) {
-			if (len1 === len2) {
-				return true;
-			}
-		}// end isOver
+CONTROLLER = function () {
 
-		function check (current_text) {
-			
-			var	current_length = current_text.length,
-				pressed_letter = getLetter(current_text);
-				
-				// if there are no mistakes before this letter
-				if (!mistake) {
-					// if this letter is incorrect
-					if (pressed_letter != training_text[current_length - 1]) {
-						mistake = true;
-						mistake_position = current_length;
+	function disableDefaultKeys () {
+		input_field.on('keydown', function (e) {
+			var defaultKeys = [13, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46];
+			if (defaultKeys.indexOf(e.keyCode) != -1) {
+				e.preventDefault();
+			}			
+		})
+	}// end disableDefaultKeys
 
-						obj.mistakeMade();
-
-					// if this letter is correct
-					}
-				// if there was a mistake before this letter
-				} else {
-					// if mistake was deleted (backspace)
-					if ( ( current_length == ( mistake_position - 1) ) || (current_length < mistake_position - 1) ) {
-						mistake = false;
-						mistake_position = -1;
-
-						obj.mistakeFixed();
-					}
-				}// end if
-
-				obj.refreshPosition(current_length);
-
-				if (isOver(current_length, training_text.length)) { obj.onEnd(); }
-		}// end check
- 
+	function bindKeypress () {
 		input_field.on('keyup', function (e) {
 			if (!time1) {
 				time1 = new Date();
-				console.log(' - time measurement started')
-				check( $(this).val() );
+				console.log(' - time measurement started');
+
+				Model.check( $(this).val() );
+
 			} else {
-				check( $(this).val() );
+
+				Model.check( $(this).val() );
+
 			}
 		});
-
 	}// end bindKeypress
 
-}//end Training
+	function setLesson () {
+		var lang  = $('#select-language').val(),
+			level = $('#select-level').val();
+		training_text = lecture[ lang ][ level ].lesson;
+	}// end setLesson
+
+	function outputLesson () {
+		text_field.html(training_text).css({'left' : '0px'});
+		input_field.val('').css({'left' : '0px'});
+
+	}// end outputLesson
+
+	function init () {
+		disableDefaultKeys();
+		bindKeypress();
+		setLesson();
+		outputLesson();
+	}// end init
+
+	$('#button-start').on('click', function (e) {
+		init();
+	})
+
+	init();
+}//end Controller
 
 
-$(function () {
-	var training = new Training();
+$(function () {	
+	text_field    = $('#text-field');
+	input_field   = $('#input-field');
+	training_text = '';
 
-	training.disableDefaultKeys();
-
-	training.setLesson('english', 'level1');
-
-	training.outputLesson();
 	
-	training.bindKeypress();
+
+ 	lecture = new Lecture();
+
+	time1 = false, time2 = false;
+
+	Controller = new CONTROLLER();
+	View 	   = new VIEW();
+	Model 	   = new MODEL();
 });

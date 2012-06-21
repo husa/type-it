@@ -7,6 +7,12 @@
 body{
 	min-width: 900px;
 }
+input, select, button, textarea, optgroup, option {
+	font: inherit;
+} 
+button{
+	cursor: pointer;
+}
 /*------------------------------- 		Main Blocks  */
 #statusbar{
 	top: 0px;
@@ -59,7 +65,6 @@ body{
 	border: none;
 	background: none;
 	line-height: 40px;
-	font: inherit;
 	vertical-align: middle;
 }
 #input-field:focus {
