@@ -11,13 +11,18 @@
   <meta name="author" content="Yurij Husnaj" />
   <meta name="keywords" content="keyboard trainer tutor type touch key button">
 
+  <script type="text/javascript" src="lib/jquery.js"></script>  
 
 </head>
 
 <body>
-<div id="keyboard-wrapper">
-  
-</div>
+<script type="text/javascript">
+	$(function() {
+		$('body').on('keydown', function (e) {
+			console.log(e.keyCode);
+		})
+	});
+</script>
 </body>
 </html>
 		

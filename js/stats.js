@@ -1,25 +1,53 @@
 var Statistic = function () {
-	this.startPoint = 0;
-	this.endPoint = 0;
+	var startPoint = 0,
+		endPoint = 0,
 
-	this.timeElapsed = 0;
+		timeElapsed = 0,
 
-	this.symbolsTyped = 0;
-	this.wordsTypes = 0;
+		symbolsTyped = 0,
+		wordsTypes = 0,
 	
-	this.mistakesMade = 0;
+		mistakesMade = 0;
 	
-	this.speedSymbols = 0;
-	this.speedWords = 0;
-	this.Accuracy = 0;
 
-	this.setSpeedSymbols = function () {
-		
+	this.Mistake = function () {
+		mistakesMade++;
 	}
-	this.setSpeedWords = function () {
+	this.setStartPoint = function (sp) {
+		if (startPoint === 0) {
+			startPoint = sp;
+		}
+	}
+	this.setEndPoint = function (ep) {
+		if (endPoint === 0) {
+			endPoint = ep;
+		}
 
+		timeElapsed += (endPoint - startPoint);
+		startPoint  = 0;
+		endPoint    = 0;
 	}
-	this.setAccuracy = function () {
 
+
+		function speedSymbols () {
+			return  Math.round( symbolsTyped / (timeElapsed / (1000*60)) );
+		}
+		function speedWords () {
+			return Math.round( wordsTypes / (timeElapsed / (1000*60)) );
+		}
+		function Accuracy () {
+			return 100 - ( (mistakesMade * 100) / symbolsTyped );
+		}
+	this.getSpeedSymbols = function () {
+		return speedSymbols();
 	}
+	this.getSpeedWords = function () {
+		return speedWords();
+	}
+	this.getAccuracy = function () {
+		return Accuracy();
+	}
+
 }// end Statistic constructor
+
+var Stats = new Statistic();

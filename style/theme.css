@@ -36,7 +36,16 @@ body{
 }
 .mistake{	
 }
+	/*	Keyboard	*/
 #keyboard-wrapper{
 	background: #7FC9FF;	
 }
+.button{
+	background: #B6FFDE;
+}
+.highlighted {
+	background: #00FF8C;
+}
+/*	End Keyboard	*/
+
 /*------------------------------ 		Footer Elements  */

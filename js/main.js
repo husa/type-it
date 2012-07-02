@@ -19,6 +19,9 @@ var MODEL = function () {
 		var	current_length = current_text.length,
 			pressed_letter = getLetter(current_text);
 			
+			// if it's over 
+			if (isOver(current_length, training_text.length)) { View.onEnd(); return }
+
 			// if there are no mistakes before this letter
 			if (!mistake) {
 				// if this letter is incorrect
@@ -29,6 +32,9 @@ var MODEL = function () {
 					View.mistakeMade();
 
 				// if this letter is correct
+				} else {
+					// highlight next button
+					View.highlightButton(training_text[current_length]);
 				}
 			// if there was a mistake before this letter
 			} else {
@@ -37,22 +43,22 @@ var MODEL = function () {
 					mistake = false;
 					mistake_position = -1;
 
-					View.mistakeFixed();
+					View.mistakeFixed(current_length);
 				}
 			}// end if
 
 			View.refreshPosition(current_length);
-
-			if (isOver(current_length, training_text.length)) { View.onEnd(); }
 	}// end check
 
 	this.check = function (current_text) {
 		check(current_text);
 	}// end check method
 
-}// end Model
+}// end MODEL
 
 var VIEW = function () {
+	var Buttons	= $('.button');
+
 	this.refreshPosition = function (len) {
 		var len_symbols = text_field.html().length,
 			len_px      = text_field.width(),
@@ -80,16 +86,68 @@ var VIEW = function () {
 			console.log('text    = ' + typed_text);
 			console.log('symbols = ' + typed_symbols);
 			console.log('words   = ' + typed_words);
+
+			alert('Your speed is ' + Math.round( typed_symbols / ((time2 - time1) / (1000*60)) ) + ' ch/min');
 	}// end onEnd
+
+	this.highlightButton = function (key) {
+
+		$('.highlighted').removeClass('highlighted');
+
+		if (key == ' ') {
+			$('.c32').addClass('highlighted');
+			return;
+		}
+		if (key == key.toUpperCase()) {
+			$('.c16').addClass('highlighted');
+			key = key.toLowerCase();
+		}
+
+		for (var i in Buttons) {
+			if (key == Buttons[i].innerText) {
+				$(Buttons[i]).addClass('highlighted');
+			}
+		}
+	}// end highlightButton
 
 	this.mistakeMade = function () {
 		input_field.addClass('mistake');
+		$('.highlighted').removeClass('highlighted');		
+		$('.c8').addClass('highlighted');
 	}// end mistakeMade
 
-	this.mistakeFixed = function () {
+	this.mistakeFixed = function (len) {
 		input_field.removeClass('mistake');
+		$('.c8').removeClass('highlighted');
+		this.highlightButton(training_text[len]);
 	}// end mistakeFixed
-}// end View
+
+	this.outputLesson = function (training, keyboard) {
+		// initializing left margin and ouput lesson and initializing "input_field"
+		text_field
+			.css({'left' : '0px'})
+			.html(training_text);
+		input_field
+			.css({'left' : '0px'})
+			.val('');
+
+		// output "new letters"
+		for (var s = '', i=0, n = training.newLetters.length; i < n; i++) {
+			s = s + ' ' + training.newLetters[i]; 
+		}
+		$('#info-wrapper').text('New Letters: ' + s );
+
+		// ouput keyboard layout
+		for (var key in keyboard) {
+			$('.c' + key + ' span').html(keyboard[key]);
+		}
+		// highlight first key
+		this.highlightButton(training_text[0]);
+		// focus on input_field
+		input_field.focus();
+	}// end outputLesson
+
+}// end VIEW
 
 CONTROLLER = function () {
 
@@ -122,19 +180,15 @@ CONTROLLER = function () {
 		var lang  = $('#select-language').val(),
 			level = $('#select-level').val();
 		training_text = lecture[ lang ][ level ].lesson;
+
+		View.outputLesson(lecture[ lang ][ level ], lecture[ lang ].alphabet);
+
 	}// end setLesson
-
-	function outputLesson () {
-		text_field.html(training_text).css({'left' : '0px'});
-		input_field.val('').css({'left' : '0px'});
-
-	}// end outputLesson
 
 	function init () {
 		disableDefaultKeys();
 		bindKeypress();
 		setLesson();
-		outputLesson();
 	}// end init
 
 	$('#button-start').on('click', function (e) {
@@ -142,7 +196,7 @@ CONTROLLER = function () {
 	})
 
 	init();
-}//end Controller
+}//end CONTROLLER
 
 
 $(function () {	
@@ -156,7 +210,8 @@ $(function () {
 
 	time1 = false, time2 = false;
 
-	Controller = new CONTROLLER();
 	View 	   = new VIEW();
 	Model 	   = new MODEL();
+	Controller = new CONTROLLER();
+
 });

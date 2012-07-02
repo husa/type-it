@@ -61,7 +61,7 @@ button{
 	position: relative;
 	padding-left: 250px;
 	min-height: 40px;
-	width: 100%;
+	width: 200%;
 	border: none;
 	background: none;
 	line-height: 40px;
@@ -73,7 +73,66 @@ button{
 .mistake{	
 	color: red; /* default color*/
 }
+	/*	Keyboard	*/
 #keyboard-wrapper{
 
 }
+.buttons-line{
+	display: inline-block; 
+	max-height: 60px;
+}
+li.button{
+	display: block;
+	float: left;
+	min-width: 44px;
+	height: 44px;
+	line-height: 44px;
+
+	margin: 3px;
+	padding: 0px 2px;
+
+	text-align: center;
+}
+/* Backspace */
+.c8{
+	width: 144px;
+}
+/* Tab */
+.c9{
+	width: 94px;
+}
+ /* "\" */
+.c220{
+	width: 94px;
+}
+/* CapsLock */
+.c20{
+	width: 118px;
+}
+/*	Enter */
+.c13{
+	width: 124px;
+}
+/* Shift */
+.c16{
+	width: 148px;
+}
+/* Ctrl */
+.c17{
+	width: 100px;
+}
+/* Alt */
+.c18{
+	width: 100px;
+}
+/*	Space */
+.c32{
+	width: 406px;
+	content: 'qwerty';
+}
+.highlighted {
+
+}
+/*	End Keyboard	*/
+
 /*------------------------------ 		Footer Elements  */
