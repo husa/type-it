@@ -16,14 +16,20 @@ button{
 /*------------------------------- 		Main Blocks  */
 #statusbar{
 	top: 0px;
-	width: 100%;
+}
+#content-wrapper{
+	width: 880px;
+	margin: 0 auto;
+}
+#logo{
+
 }
 #main-content-wrapper{
-	width: 860px;
-	margin: 0 auto;
+	
 }
 #footer{
 	position: fixed;
+	display: inline-block;
 	width: 100%;
 	bottom: 0px;
 	z-index: -1;
@@ -32,6 +38,22 @@ button{
 /*------------------------------ 		Statusbar Elements  */
 
 /*------------------------------ 		Main Content Elements */
+#logo{
+	margin: 20px auto 10px 30px;
+	font-size: 72px;
+	letter-spacing: -1px;
+}
+#logo > span{
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: -2px;
+	letter-spacing: -3px;
+}
+#logo > p {
+	margin: -5px 10px 40px 90px;
+	font-size: 28px;
+	letter-spacing: -1px;	
+}
 #info-wrapper{
 	float: right;
 }
@@ -136,3 +158,10 @@ li.button{
 /*	End Keyboard	*/
 
 /*------------------------------ 		Footer Elements  */
+#footer{
+	text-align: right;
+}
+#footer p{
+}
+#footer p a{
+}

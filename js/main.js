@@ -91,6 +91,7 @@ var VIEW = function () {
 	}// end onEnd
 
 	this.highlightButton = function (key) {
+		var spec_symbols = '`~!@#$%^&*()_+1234567890-=[{]}\\|;:\'"",<.>/?';
 
 		$('.highlighted').removeClass('highlighted');
 
@@ -98,11 +99,12 @@ var VIEW = function () {
 			$('.c32').addClass('highlighted');
 			return;
 		}
-		if (key == key.toUpperCase()) {
-			$('.c16').addClass('highlighted');
-			key = key.toLowerCase();
+		if ( spec_symbols.indexOf(key) == -1 ) {
+			if (key == key.toUpperCase()) {
+				$('.c16').addClass('highlighted');
+				key = key.toLowerCase();
+			}
 		}
-
 		for (var i in Buttons) {
 			if (key == Buttons[i].innerText) {
 				$(Buttons[i]).addClass('highlighted');
@@ -141,6 +143,7 @@ var VIEW = function () {
 		for (var key in keyboard) {
 			$('.c' + key + ' span').html(keyboard[key]);
 		}
+
 		// highlight first key
 		this.highlightButton(training_text[0]);
 		// focus on input_field
@@ -185,17 +188,25 @@ CONTROLLER = function () {
 
 	}// end setLesson
 
-	function init () {
-		disableDefaultKeys();
-		bindKeypress();
-		setLesson();
+	function init (first) {
+			disableDefaultKeys();
+			bindKeypress();
+		if (!first) {
+			setLesson();	
+		} else {
+			var lang  = 'sample'
+			level = 'level';
+			training_text = lecture[ lang ][ level ].lesson;
+
+			View.outputLesson(lecture[ lang ][ level ], lecture[ lang ].alphabet);
+		}
 	}// end init
 
 	$('#button-start').on('click', function (e) {
-		init();
+		init(false);
 	})
 
-	init();
+	init(true);
 }//end CONTROLLER
 
 
