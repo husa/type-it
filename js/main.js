@@ -25,7 +25,7 @@ var MODEL = function () {
 			// if there are no mistakes before this letter
 			if (!mistake) {
 				// if this letter is incorrect
-				if (pressed_letter != training_text[current_length - 1]) {
+				if (pressed_letter != training_text[current_length - 1] || current_text[current_length - 2] !== training_text[current_length - 2]) {
 					mistake = true;
 					mistake_position = current_length;
 
@@ -137,7 +137,7 @@ var VIEW = function () {
 		for (var s = '', i=0, n = training.newLetters.length; i < n; i++) {
 			s = s + ' ' + training.newLetters[i]; 
 		}
-		$('#info-wrapper').text('New Letters: ' + s );
+		$('#info-wrapper').text('New Characters: ' + s );
 
 		// ouput keyboard layout
 		for (var key in keyboard) {
